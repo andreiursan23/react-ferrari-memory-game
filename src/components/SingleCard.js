@@ -14,16 +14,14 @@ function SingleCard({ card, handleChoice, flipped, disabled }) {
           src={card.src}
           alt="card-front"
           className="front"
-          minHeight="300px"
-          minWidth="300px"
+          width="200px"
         />
         <img
           src="/img/ferrari-logo-back.png"
           alt="card-back"
           onClick={handleClick}
           className="back"
-          minHeight="300px"
-          minWidth="300px"
+          width="200px"
         />
       </div>
     </div>
