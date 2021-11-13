@@ -1,27 +1,24 @@
 import "./SingleCard.scss";
 
-function SingleCard({ card, handleChoice, flipped, disabled }) {
+function SingleCard({ card, saveChoice, flipped, disabled }) {
   const handleClick = () => {
     if (!disabled) {
-      handleChoice(card);
+      saveChoice(card);
     }
   };
 
   return (
-    <div className="card">
+    <div className="card" onClick={handleClick}>
       <div className={flipped ? "flipped" : ""}>
         <img
           src={card.src}
-          alt="card-front"
+          alt="Front of the card with Ferrari cars"
           className="front"
-          width="200px"
         />
         <img
-          src="/img/ferrari-logo-back.png"
-          alt="card-back"
-          onClick={handleClick}
+          src=".\img\ferrari-logo-back.png"
+          alt="Ferrari logo, back of the card"
           className="back"
-          width="200px"
         />
       </div>
     </div>

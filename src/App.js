@@ -18,24 +18,24 @@ function App() {
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
 
-  // Shuffle cards
+  // Create cards array and shuffle it
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
-      .sort(() => Math.random() - 0.5) // sort the array to make sure the order is random
-      .map((card) => ({ ...card, id: Math.random() })); // add an id to each element
+      .sort(() => 0.5 - Math.random())
+      .map((elem) => {
+        return { ...elem, id: Math.random() };
+      });
 
-    setChoiceOne(null);
-    setChoiceTwo(null);
     setCards(shuffledCards);
     setTurns(0);
   };
 
-  // Handle a choice
-  const handleChoice = (card) => {
-    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+  // Save choice after clicking on card
+  const saveChoice = (choice) => {
+    choiceOne ? setChoiceTwo(choice) : setChoiceOne(choice);
   };
 
-  // Compare two selected cards
+  // Compare choices
   useEffect(() => {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
@@ -49,25 +49,27 @@ function App() {
             }
           });
         });
-        resetTurn();
+        resetChoices();
       } else {
-        setTimeout(() => resetTurn(), 1000);
+        setTimeout(() => resetChoices(), 1000);
       }
     }
   }, [choiceOne, choiceTwo]);
 
-  // Reset choices and increase turn
-  const resetTurn = () => {
-    setTurns((prevTurns) => prevTurns + 1);
-    setChoiceOne(null);
-    setChoiceTwo(null);
-    setDisabled(false);
-  };
-
-  // Start a new game automatically
+  // Automatically start game on mount
   useEffect(() => {
     shuffleCards();
   }, []);
+
+  console.log(cards);
+
+  // Reset choices after comparing a pair
+  const resetChoices = () => {
+    setChoiceOne(null);
+    setChoiceTwo(null);
+    setTurns((prevTurn) => prevTurn + 1);
+    setDisabled(false);
+  };
 
   return (
     <div className="App">
@@ -75,21 +77,18 @@ function App() {
         Ferrari Memory Car<strong className="special-color">(d)</strong>s
       </h1>
       <button onClick={shuffleCards}>New Game</button>
-
       <div className="card-grid">
         {cards.map((card) => (
           <SingleCard
-            card={card}
             key={card.id}
-            handleChoice={handleChoice}
+            card={card}
+            saveChoice={saveChoice}
             flipped={card === choiceOne || card === choiceTwo || card.matched}
             disabled={disabled}
           />
         ))}
       </div>
-      <div>
-        <strong>Turns: {turns}</strong>
-      </div>
+      <div>Turns: {turns}</div>
     </div>
   );
 }
